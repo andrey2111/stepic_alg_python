@@ -1,29 +1,32 @@
-n = int(input())
-A = input().split()
-for i in range(0, n):
-    A[i] = int(A[i])
-D = [None]*n
-for i in range(0, n):
-    D[i] = 1
-    for j in range(0, i):
-        if A[i] <= A[j] and D[j]+1 > D[i]:
-            D[i] = D[j] + 1
-ans = 0
-for i in range(0, n):
-    ans = max(ans, D[i])
-print(A)
-print(D)
-print(ans)
-answer = [None]*ans
-for i in range(n-1, -1, -1):
-    if D[i] == ans:
-        answer[-1] = i
-        break
-k = answer[-1]
-print(answer)
-for i in range(k-1, -1, -1):
-    if A[i] >= A[k] and D[i] == D[k]-1:
-        answer[k-2] = i
-        break
-print(answer)
-print(k)
+from math import ceil
+
+N = int(input())
+X = [int(i) for i in input().split()]
+# with open('input.txt') as inf:
+#     N = int(inf.readline())
+#     X = [int(i) for i in inf.readline().split()]
+P = [0]*N
+M = [0]*(N+1)
+L = 0
+for i in range(N):
+    lo = 1
+    hi = L
+    while lo <= hi:
+        mid = ceil((lo+hi)/2)
+        if X[M[mid]] >= X[i]:
+            lo = mid+1
+        else:
+            hi = mid-1
+    newL = lo
+    P[i] = M[newL-1]
+    M[newL] = i
+    if newL > L:
+        L = newL
+S = [None]*L
+k = M[L]
+for i in range(L-1, -1, -1):
+    S[i] = k + 1
+    k = P[k]
+print(L)
+for i in S:
+    print(i, end=' ')
